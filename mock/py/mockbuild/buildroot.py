@@ -480,6 +480,35 @@ class Buildroot(object):
     @traceLog()
     def _setup_devices(self):
         if self.config['internal_dev_setup']:
+
+            from mockbuild.nspawn_loops import create_loop, LoopControl, LoopServer
+            util.mkdirIfAbsent(self.make_chroot_path("tmp", "dev"))
+
+            # dir_fd = os.open(self.make_chroot_path("dev"), os.O_DIRECTORY)
+            dir_fd = os.open(self.make_chroot_path("tmp", "dev"), os.O_DIRECTORY)
+            # import ipdb; ipdb.set_trace()
+
+            # fd = os.open(self.make_chroot_path("dev", "loop30"), os.O_RDWR)
+            # fd = os.open(self.make_chroot_path("dev", "loop31"), os.O_RDWR)
+
+            fd = os.open(self.make_chroot_path("tmp", "foobar"), os.O_CREAT)
+
+
+
+
+            # ctl = LoopControl(dir_fd)
+            # ctl = LoopControl()
+
+            server = LoopServer(None)
+            # server.ctl = ctl
+
+            server._create_device(fd, dir_fd, offset=40)
+
+            import ipdb; ipdb.set_trace()
+            pass
+
+
+
             util.rmtree(self.make_chroot_path("dev"), selinux=self.selinux, exclude=self.mounts.get_mountpoints())
             util.mkdirIfAbsent(self.make_chroot_path("dev", "pts"))
             util.mkdirIfAbsent(self.make_chroot_path("dev", "shm"))
